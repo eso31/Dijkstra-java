@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 public class Dijkstra{
 
@@ -11,17 +12,29 @@ public class Dijkstra{
 	}
 
 	public Dijkstra(){
-		Scanner miScanner = new Scanner(System.in);
+		String[] data = ReadFile();
+
+		/*Scanner miScanner = new Scanner(System.in);
 		
 		System.out.print("Number of Cases: ");
-		int tests=Integer.parseInt(miScanner.nextLine());
+		int tests=Integer.parseInt(miScanner.nextLine());*/
 
-		for(int i=0; i<tests; i++)
-			test(i+1);
+		int tests = Integer.parseInt(data[0]);
+		int index = 1;
+		for(int i=0; i<tests; i++){
+			String[] arraylx = data[index].split(" ");
+			int l = Integer.parseInt(arraylx[0]);
+			int x = Integer.parseInt(arraylx[1]);
+			index++;
+			String s =data[index];
+			index++;
+			//System.out.print(""+l+x+s);
+			test(i+1,l,x,s);
+		}
 	}
 
-	public void test(int caseNumber){
-		Scanner miScanner2 = new Scanner(System.in);
+	public void test(int caseNumber, int l, int x, String s){
+		/*Scanner miScanner2 = new Scanner(System.in);
 		
 		System.out.print("L X: ");
 		String lx = miScanner2.nextLine();
@@ -35,7 +48,8 @@ public class Dijkstra{
 		if(s.length()!=l){
 			System.out.println("Invalid data!");
 			return;
-		}
+		}*/
+
 
 
 		String finalString = "";
@@ -54,19 +68,24 @@ public class Dijkstra{
 		finalString = find(finalString, "k");
 		//System.out.println(finalString);
 
-		if(findedI&&findedJ&&findedK)
-			System.out.println("Case #"+caseNumber+" YES");
-		else
-			System.out.println("Case #"+caseNumber+" NO");
+		String finalAnswear = "";
+		if(findedI&&findedJ&&findedK){
+			System.out.println("Case #"+caseNumber+": YES");
+			finalAnswear+="Case #"+caseNumber+": YES";
+		}
+		else{
+			System.out.println("Case #"+caseNumber+": NO");
+			finalAnswear+="Case #"+caseNumber+": NO";
+		}
 
 		findedI = findedJ = findedK = false;
-		System.out.println("");
+		//System.out.println("");
 	}
 
 	public String find(String word, String toFind){
 		String[] x = word.split("");
 
-		String sign = "";
+		//String sign = "";
 		String a = x[0];
 		if(check(a,toFind))
 			return String.join("",word).substring(1,word.length());
@@ -75,17 +94,16 @@ public class Dijkstra{
 			//System.out.print(a+" * "+x[i]+" = ");
 			a = multiply(a,x[i]);
 
-			sign="";
+			/*sign="";
 			if(negativeSign%2==0)
 				sign="";
 			else
 				sign="-";
-			//System.out.println(sign+a);
+			System.out.println(sign+a);*/
 
 			if(check(a,toFind))
 				return String.join("",word).substring(i+1,word.length());
 		}
-
 		return "";
 	}
 
@@ -109,21 +127,8 @@ public class Dijkstra{
 
 	public String multiply(String a, String b){
 		switch(a){
-			case "1":{
-				if(b.equals("1")){
-					return "1";
-				}
-				else if(b.equals("i")){
-					return "i";
-				}
-				else if(b.equals("j")){
-					return "j";
-				}
-				else if(b.equals("k")){
-					return "k";
-				}
-				break;
-			}
+			case "1":
+				return b;
 			case "i":{
 				if(b.equals("1")){
 					return "i";
@@ -178,4 +183,48 @@ public class Dijkstra{
 		}
 		return null;
 	}
+
+	public String[] ReadFile(){
+		// The name of the file to open.
+        String fileName = "C-small-practice.in";
+
+        // This will reference one line at a time
+        String line = null;
+        String fileString = "";
+
+        try {
+            // FileReader reads text files in the default encoding.
+            FileReader fileReader = 
+                new FileReader(fileName);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = 
+                new BufferedReader(fileReader);
+
+            while((line = bufferedReader.readLine()) != null) {
+                fileString += line+",";
+            }   
+
+            // Always close files.
+            bufferedReader.close();         
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println(
+                "Unable to open file '" + 
+                fileName + "'");                
+        }
+        catch(IOException ex) {
+            System.out.println(
+                "Error reading file '" 
+                + fileName + "'");                  
+            // Or we could just do this: 
+            // ex.printStackTrace();
+        }
+
+
+        return fileString.split(",");
+	}
+
+
+
 }
